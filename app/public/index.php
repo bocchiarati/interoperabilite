@@ -11,5 +11,5 @@ $xsl_file = file_get_contents("XSL/????.xsl");
 
 $processor = new XSLTProcessor();
 //$processor->importStylesheet($xsl_file);
-//echo  $processor->transformToXml($meteo_content);
+//echo $processor->transformToXml($meteo_content);
 
