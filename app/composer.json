@@ -1,6 +1,7 @@
 {
   "require": {
-
+    "ext-xsl": "*",
+    "ext-simplexml": "*"
   },
   "autoload": {
     "psr-4": {

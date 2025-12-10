@@ -5,12 +5,10 @@ $meteo_content = file_get_contents($url_api_meteo);
 
 file_put_contents("XML/meteo_content.xml", $meteo_content);
 
-
-// TODO ENREGISTRER LE XSL Dans app/public/XSL/nom et mettre le chemin dans les doubles quote
-$xsl_file = file_get_contents("XSL/????.xsl");
+$xml_file = simplexml_load_file("XML/meteo_content.xml");
+$xsl_file = simplexml_load_file("XSL/meteo.xsl");
 
 $processor = new XSLTProcessor();
-//TODO : decommente ici
-//$processor->importStylesheet($xsl_file);
-//echo $processor->transformToXml($meteo_content);
+$processor->importStylesheet($xsl_file);
+echo $processor->transformToXml($xml_file);
 
