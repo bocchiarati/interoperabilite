@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+    <xsl:output method="html" indent="yes" encoding="UTF-8"/>
+
+    <xsl:template match="/">
+        <html lang="fr">
+            <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+                <title>Météo</title>
+            </head>
+            <body>
+                <xsl:apply-templates select="previsions/echeance[@hour='6' or @hour='12' or @hour='18']"/>
+            </body>
+        </html>
+    </xsl:template>
+
+    <xsl:template match="echeance">
+        <h1>
+            <xsl:choose>
+                <xsl:when test="@hour = 6">Matin</xsl:when>
+                <xsl:when test="@hour = 12">Midi</xsl:when>
+                <xsl:when test="@hour = 18">Soir</xsl:when>
+            </xsl:choose>
+        </h1>
+        <ul>
+            <li>Température :
+                <xsl:variable name="temp" select="round(number(temperature/level[@val='sol']) - 273.15)"/>
+                <xsl:value-of select="$temp"/> °C
+                <xsl:choose>
+                    <xsl:when test="$temp &lt;= 5">🥶</xsl:when>
+                    <xsl:when test="$temp &gt;= 25">🥵</xsl:when>
+                    <xsl:otherwise>😐</xsl:otherwise>
+                </xsl:choose></li>
+            <xsl:if test="pluie &gt; 0">
+                <li>Pluie 🌧️</li>
+            </xsl:if>
+            <xsl:if test="vent_moyen/level &gt; 0">
+                <li>Vent 💨</li>
+            </xsl:if>
+            <xsl:if test="risque_neige='oui'">
+                <li>Neige ❄️</li>
+            </xsl:if>
+        </ul>
+    </xsl:template>
+
+</xsl:stylesheet>
