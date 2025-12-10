@@ -10,6 +10,7 @@ file_put_contents("XML/meteo_content.xml", $meteo_content);
 $xsl_file = file_get_contents("XSL/????.xsl");
 
 $processor = new XSLTProcessor();
+//TODO : decommente ici
 //$processor->importStylesheet($xsl_file);
 //echo $processor->transformToXml($meteo_content);
 
