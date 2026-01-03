@@ -14,15 +14,4 @@ services:
     working_dir: /var/php
     networks:
       - meteo.net
-    command: sh -c "composer install && php -S 0.0.0.0:80 -t /var/php/public"
-
-  #
-  # service administration des bases sql
-  #
-  adminer:
-    image: adminer
-    ports:
-      - '8080:8080'
-    networks:
-      - meteo.net
-
+    command: sh -c "composer install && php -S 0.0.0.0:80 -t public"
