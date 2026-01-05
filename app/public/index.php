@@ -70,4 +70,31 @@ echo <<< MAP
 </body>
 MAP;
 
+$data = json_decode(file_get_contents("https://carto.g-ny.eu/data/cifs/cifs_waze_v2.json"));
 
+echo <<< ICON
+    <script>
+        var chantierIcon = L.icon({
+            iconUrl: 'image/chantier.png',
+            iconSize: [40, 40],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76],
+        });
+    </script>
+ICON;
+
+foreach ($data->incidents as $incident) {
+    // Extraction des coordonnées (séparation de la chaîne par espace)
+    $coords = explode(' ', $incident->location->polyline);
+    $lat = $coords[0];
+    $lng = $coords[1];
+    $type = $incident->type;
+    $start = $incident->starttime;
+    $end = $incident->endtime;
+
+    echo <<< INCIDENT
+        <script>
+            L.marker([$lat , $lng ]).addTo(map).bindPopup("Date de debut : $start, Date de fin : $end").setIcon(chantierIcon);
+        </script>
+INCIDENT;
+}
