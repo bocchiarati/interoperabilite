@@ -7,7 +7,7 @@ echo "<head><link rel='stylesheet' href='css/style_php.css'></head>";
 // EN LOCAL
 $url_api_geoloc_ip = "https://ipapi.co/xml";
 // UNE FOIS SUR WEBETU
-//$url_api_geoloc_ip = "https://ipapi.co/".$_SERVER["REMOTE_ADDR"]."/xml";
+$url_api_geoloc_ip = "https://ipapi.co/".$_SERVER["REMOTE_ADDR"]."/xml";
 
 $geoloc_ip_content = file_get_contents($url_api_geoloc_ip);
 
@@ -23,8 +23,46 @@ $processor->importStylesheet($xsl_geoloc_ip_file);
 
 $geoloc = $processor->transformToXML($xml_geoloc_ip_file);
 
+$adresse = "2Ter Bd Charlemagne, 54000 Nancy";
+$api_loca_adresse = "https://api-adresse.data.gouv.fr/search/?q=".urlencode($adresse)."&limit=1";
+$data_adresse = json_decode(file_get_contents($api_loca_adresse));
+
+if(empty($geoloc)){
+    if (!empty($data_adresse->features)) {
+        $coordinates = $data_adresse->features[0]->geometry->coordinates;
+        $longitude = $coordinates[0];
+        $latitude = $coordinates[1];
+        $geoloc = $latitude . "," . $longitude;
+    }
+}
+
+// POLLUTION
+$data_pollution = json_decode(file_get_contents("https://services3.arcgis.com/Is0UwT37raQYl9Jj/arcgis/rest/services/ind_grandest/FeatureServer/0/query?where=lib_zone%3D'Nancy'&outFields=*&returnGeometry=true&f=pjson"));
+
+
+$geoloc_tab = explode(',', $geoloc);
+$lat = $geoloc_tab[0];
+$lng = $geoloc_tab[1];
+
+$closest = null;
+$minDist = INF;
+foreach ($data_pollution->features as $feature) {
+    $dist = hypot($feature->attributes->y_wgs84 - $lat, $feature->attributes->x_wgs84 - $lng);
+    if ($dist < $minDist) {
+        $minDist = $dist;
+        $closest = $feature;
+    }
+}
+
 $processor->importStylesheet($xsl_geoloc_ip_info_file);
-echo "<div id='geoloc'>".$processor->transformToXML($xml_geoloc_ip_file)."</div>";
+$transform_geoloc = $processor->transformToXML($xml_geoloc_ip_file);
+$lib_qual = $closest->attributes->lib_qual;
+echo <<< GEOLOC
+    <div id='geoloc'>
+        $transform_geoloc
+        <p><strong>Qualite de l'air</strong> : $lib_qual</p>
+   </div>;
+GEOLOC;
 
 $url_api_meteo = "https://www.infoclimat.fr/public-api/gfs/xml?_ll=".$geoloc."&_auth=ARsDFFIsBCZRfFtsD3lSe1Q8ADUPeVRzBHgFZgtuAH1UMQNgUTNcPlU5VClSfVZkUn8AYVxmVW0Eb1I2WylSLgFgA25SNwRuUT1bPw83UnlUeAB9DzFUcwR4BWMLYwBhVCkDb1EzXCBVOFQoUmNWZlJnAH9cfFVsBGRSPVs1UjEBZwNkUjIEYVE6WyYPIFJjVGUAZg9mVD4EbwVhCzMAMFQzA2JRMlw5VThUKFJiVmtSZQBpXGtVbwRlUjVbKVIuARsDFFIsBCZRfFtsD3lSe1QyAD4PZA%3D%3D&_c=19f3aa7d766b6ba91191c8be71dd1ab2";
 $meteo_content = file_get_contents($url_api_meteo);
@@ -34,10 +72,10 @@ $xml_file = simplexml_load_file("XML/meteo_content.xml");
 $xsl_file = simplexml_load_file("XSL/meteo.xsl");
 
 $processor->importStylesheet($xsl_file);
-$transform = $processor->transformToXml($xml_file);
+$transform_meteo = $processor->transformToXml($xml_file);
 echo <<<METEO
     <h1 class="title"> METEO </h1>
-    <div id='meteo'> $transform </div>;
+    <div id='meteo'> $transform_meteo </div>;
 METEO;
 
 $env = parse_ini_file(".env");
@@ -141,3 +179,21 @@ echo <<< COVID
   })    
 </script>
 COVID;
+
+if (!empty($data_adresse->features)) {
+    $coordinates = $data_adresse->features[0]->geometry->coordinates;
+    $longitude = $coordinates[0];
+    $latitude = $coordinates[1];
+
+    echo <<< MARKER_ADRESSE
+        <script>
+        const ecoleIcon = L.icon({
+            iconUrl: 'image/ecole.png',
+            iconSize: [40, 40],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76],
+        });
+            L.marker([$latitude , $longitude ]).addTo(map).setIcon(ecoleIcon);
+        </script>
+MARKER_ADRESSE;
+}
