@@ -108,7 +108,7 @@ async function init() {
 
     if (tempC < 3) raisons.push("froid");
     if (tempC > 30) raisons.push("trop chaud");
-    if (vent > 5) raisons.push("vent fort");
+    if (vent > 10) raisons.push("vent fort");
     if (pluie > 0) raisons.push("pluie");
     if (indicePollution > 2) raisons.push("pollution élevée");
     if (stations.every(s => s.bikes === 0)) raisons.push("aucun vélo disponible");
