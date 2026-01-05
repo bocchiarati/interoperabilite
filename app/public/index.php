@@ -35,7 +35,6 @@ $xsl_file = simplexml_load_file("XSL/meteo.xsl");
 
 $processor->importStylesheet($xsl_file);
 echo $processor->transformToXml($xml_file);
-
 $env = parse_ini_file(".env");
 $apiKey = $env["API_KEY"];
 echo <<< MAP
