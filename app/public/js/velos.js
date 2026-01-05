@@ -140,7 +140,9 @@ async function init() {
         .slice(0, 10)
         .forEach(s => {
             const li = document.createElement("li");
-            li.textContent = `${s.name} – vélos : ${s.bikes}, places : ${s.docks}`;
+            li.innerHTML = `<strong>${s.name}</strong>
+            <p>Nombre de vélos disponibles : ${s.bikes}</p>
+            <p>Nombre de places disponibles : ${s.docks}</p>`;
             ul.appendChild(li);
         });
 
