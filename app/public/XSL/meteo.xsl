@@ -4,25 +4,23 @@
     <xsl:output method="html" indent="yes" encoding="UTF-8"/>
 
     <xsl:template match="/">
-        <html lang="fr">
-            <head>
-                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-                <title>Météo</title>
-            </head>
-            <body>
+            <div id="matin">
                 <xsl:apply-templates select="previsions/echeance[@hour='9']">
                     <xsl:with-param name="label">Matin</xsl:with-param>
                 </xsl:apply-templates>
+            </div>
 
+            <div id="midi">
                 <xsl:apply-templates select="previsions/echeance[@hour='15']">
                     <xsl:with-param name="label">Après-midi</xsl:with-param>
                 </xsl:apply-templates>
+            </div>
 
+            <div id="soir">
                 <xsl:apply-templates select="previsions/echeance[@hour='21']">
                     <xsl:with-param name="label">Soir</xsl:with-param>
                 </xsl:apply-templates>
-            </body>
-        </html>
+            </div>
     </xsl:template>
 
     <xsl:template match="echeance">

@@ -1,5 +1,5 @@
 <?php
-
+echo "<head><link rel='stylesheet' href='css/style.css'></head>";
 // api GEOLOC IP
 // https://ipapi.co/{ip?}/{format}/
 // ? = facultatif
@@ -24,7 +24,7 @@ $processor->importStylesheet($xsl_geoloc_ip_file);
 $geoloc = $processor->transformToXML($xml_geoloc_ip_file);
 
 $processor->importStylesheet($xsl_geoloc_ip_info_file);
-echo $processor->transformToXML($xml_geoloc_ip_file);
+echo "<div id='geoloc'>".$processor->transformToXML($xml_geoloc_ip_file)."</div>";
 
 $url_api_meteo = "https://www.infoclimat.fr/public-api/gfs/xml?_ll=".$geoloc."&_auth=ARsDFFIsBCZRfFtsD3lSe1Q8ADUPeVRzBHgFZgtuAH1UMQNgUTNcPlU5VClSfVZkUn8AYVxmVW0Eb1I2WylSLgFgA25SNwRuUT1bPw83UnlUeAB9DzFUcwR4BWMLYwBhVCkDb1EzXCBVOFQoUmNWZlJnAH9cfFVsBGRSPVs1UjEBZwNkUjIEYVE6WyYPIFJjVGUAZg9mVD4EbwVhCzMAMFQzA2JRMlw5VThUKFJiVmtSZQBpXGtVbwRlUjVbKVIuARsDFFIsBCZRfFtsD3lSe1QyAD4PZA%3D%3D&_c=19f3aa7d766b6ba91191c8be71dd1ab2";
 $meteo_content = file_get_contents($url_api_meteo);
@@ -34,7 +34,11 @@ $xml_file = simplexml_load_file("XML/meteo_content.xml");
 $xsl_file = simplexml_load_file("XSL/meteo.xsl");
 
 $processor->importStylesheet($xsl_file);
-echo $processor->transformToXml($xml_file);
+$transform = $processor->transformToXml($xml_file);
+echo <<<METEO
+    <h1 class="title"> METEO </h1>
+    <div id='meteo'> $transform </div>;
+METEO;
 
 $env = parse_ini_file(".env");
 $apiKey = $env["API_KEY"];
@@ -49,7 +53,8 @@ echo <<< MAP
          crossorigin=""></script>
 </head>
 <body> 
-    <div style='height: 750px; margin-bottom: 10em; width:75%; margin-left:auto; margin-right:auto' id='map'></div>
+    <h1 class="title"> MAP INFO-TRAFIC</h1>
+    <div id='map'></div>
     <script>
         const map = L.map('map').setView([$geoloc], 13);
         
