@@ -1,5 +1,5 @@
 <?php
-echo "<head><link rel='stylesheet' href='css/style.css'></head>";
+echo "<head><link rel='stylesheet' href='css/style_php.css'></head>";
 // api GEOLOC IP
 // https://ipapi.co/{ip?}/{format}/
 // ? = facultatif
