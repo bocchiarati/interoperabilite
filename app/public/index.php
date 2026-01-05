@@ -36,3 +36,38 @@ $xsl_file = simplexml_load_file("XSL/meteo.xsl");
 $processor->importStylesheet($xsl_file);
 echo $processor->transformToXml($xml_file);
 
+$env = parse_ini_file(".env");
+$apiKey = $env["API_KEY"];
+echo <<< MAP
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+         crossorigin=""/>
+     
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+         crossorigin=""></script>
+</head>
+<body> 
+    <div style='height: 750px; margin-bottom: 10em; width:75%; margin-left:auto; margin-right:auto' id='map'></div>
+    <script>
+        const map = L.map('map').setView([$geoloc], 13);
+        
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+        
+        const marker = L.marker([$geoloc]).addTo(map);
+        
+        const trafficLayer = L.tileLayer(`https://{s}.api.tomtom.com/traffic/map/4/tile/flow/relative/{z}/{x}/{y}.png?key=$apiKey`, {
+            maxZoom: 22,
+            tileSize: 256,
+            subdomains: ['a', 'b', 'c', 'd'],
+            opacity: 0.7
+        }).addTo(map);
+    </script>
+</body>
+MAP;
+
+
