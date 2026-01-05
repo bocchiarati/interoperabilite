@@ -98,3 +98,41 @@ foreach ($data->incidents as $incident) {
         </script>
 INCIDENT;
 }
+
+
+// COVID :
+$covid_data = json_decode(file_get_contents("https://www.data.gouv.fr/api/1/datasets/r/d2671c6c-c0eb-4e12-b69a-8e8f87fc224c"));
+$date = [];
+$casConfirme = [];
+
+foreach ($covid_data as $covid) {
+    $date[] = $covid->date;
+    $casConfirme[] = $covid->casConfirmes;
+}
+
+$labels_json = json_encode($date);
+$cases_json = json_encode($casConfirme);
+
+echo <<< COVID
+<h1 class="title"> Evolution de la pandmie du COVID-19</h1>
+<canvas id="covidChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = $labels_json
+  const cases = $cases_json  
+
+  new Chart(document.getElementById('covidChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Cas Confirmés',
+        data: cases,
+        borderColor: 'rgb(75, 192, 192)',
+        fill: false
+      }]
+    }
+  })    
+</script>
+COVID;
