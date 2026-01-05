@@ -64,6 +64,11 @@ li {
     color: white;
 }
 
+#sources-section ul li  {
+    word-break: break-all;
+}
+
+
 
 @media (max-width: 600px) {
     main {
