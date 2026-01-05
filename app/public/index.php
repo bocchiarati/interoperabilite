@@ -56,14 +56,14 @@ echo <<< MAP
     <h1 class="title"> MAP INFO-TRAFIC</h1>
     <div id='map'></div>
     <script>
-        const map = L.map('map').setView([$geoloc], 13);
+        const map = L.map('map').setView([$geoloc ], 13);
         
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
         
-        const marker = L.marker([$geoloc]).addTo(map);
+        const marker = L.marker([$geoloc ]).addTo(map);
         
         const trafficLayer = L.tileLayer(`https://{s}.api.tomtom.com/traffic/map/4/tile/flow/relative/{z}/{x}/{y}.png?key=$apiKey`, {
             maxZoom: 22,
