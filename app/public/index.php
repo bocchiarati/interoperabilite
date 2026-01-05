@@ -197,3 +197,27 @@ if (!empty($data_adresse->features)) {
         </script>
 MARKER_ADRESSE;
 }
+
+
+echo <<<APIS
+<footer>
+    <h3 style="color: #6ec2f3; border-bottom: 1px solid #343a40; padding-bottom: 10px;">Sources</h3>
+    <ul style="
+        list-style: none; 
+        padding: 0; 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+        gap: 15px;
+    ">
+        <li><strong style="color: white;">📍 Géolocalisation IP :</strong> <a href="https://ipapi.co/" style="color: #fd746c; text-decoration: none;">ipapi.co</a></li>
+        <li><strong style="color: white;">🏠 Adresse :</strong> <a href="https://adresse.data.gouv.fr/" style="color: #fd746c; text-decoration: none;">data.gouv.fr</a></li>
+        <li><strong style="color: white;">🍃 Qualité de l'air :</strong> <a href="https://www.atmo-grandest.eu/" style="color: #fd746c; text-decoration: none;">Atmo Grand Est</a></li>
+        <li><strong style="color: white;">☁️ Météo :</strong> <a href="https://www.infoclimat.fr/" style="color: #fd746c; text-decoration: none;">Infoclimat</a></li>
+        <li><strong style="color: white;">🗺️ Cartographie :</strong> <a href="https://www.openstreetmap.org/" style="color: #fd746c; text-decoration: none;">OpenStreetMap</a></li>
+        <li><strong style="color: white;">🚗 Trafic :</strong> <a href="https://developer.tomtom.com/" style="color: #fd746c; text-decoration: none;">TomTom API</a></li>
+        <li><strong style="color: white;">⚠️ Incidents :</strong> <a href="https://carto.g-ny.eu/" style="color: #fd746c; text-decoration: none;">G-NY Nancy</a></li>
+        <li><strong style="color: white;">📊 COVID-19 :</strong> <a href="https://www.data.gouv.fr/" style="color: #fd746c; text-decoration: none;">Santé Publique France</a></li>
+        <li><strong style="color: white;">Github :</strong> <a href="https://github.com/bocchiarati/interoperabilite" style="color: #fd746c; text-decoration: none;">Github Projet</a></li>
+    </ul>
+</footer>
+APIS;

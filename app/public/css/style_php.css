@@ -52,3 +52,16 @@ body {
     margin-bottom: 10em; width:75%; margin-left:auto; margin-right:auto;
     background-color: #ebebff; padding: 3.5em; border-radius: 2em
 }
+
+
+footer {
+    margin-top: 5em;
+    padding: 2em;
+    background-color: #242b31;
+    border-top: 2px solid #343a40;
+    border-radius: 2em 2em 0 0;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: sans-serif;
+    color: #cbd5e0;}
