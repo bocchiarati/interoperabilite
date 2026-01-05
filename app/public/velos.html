@@ -41,6 +41,8 @@
     </ul>
   </section>
 
+  <div style='height: 500px; margin-bottom: 2em; width:75%; margin-left:auto; margin-right:auto' id='map'></div>
+
   <section id="sources-section">
     <h2>Sources / Liens API</h2>
     <ul id="sources">
@@ -51,8 +53,6 @@
     </ul>
   </section>
 
-  <div style='height: 750px; margin-bottom: 10em; width:75%; margin-left:auto; margin-right:auto' id='map'></div>
-
 </main>
 
 <script src="js/velos.js"></script>
@@ -60,8 +60,16 @@
   async function initMap() {
     const geoResp = await fetch("https://ipapi.co/json/");
     const geo = await geoResp.json();
-    const lat = geo.latitude;
-    const lon = geo.longitude;
+    let lat, lon;
+    const ville = geo.city;
+
+    if (ville !== "Nancy") {
+      lat = 48.68298;
+      lon = 6.16095;
+    } else {
+      lat = geo.latitude;
+      lon = geo.longitude;
+    }
 
     const map = L.map('map').setView([lat, lon], 14);
 
@@ -99,7 +107,13 @@
       };
     });
 
-
+    //creation icon velo
+    var veloIcon = L.icon({
+      iconUrl: 'image/velo.png',
+      iconSize: [40, 40],
+      iconAnchor: [22, 94],
+      popupAnchor: [-3, -76],
+    });
 
     stations.forEach(st => {
       const marker = L.marker([st.lat, st.lon]).addTo(map);
@@ -107,7 +121,7 @@
             <strong>${st.name}</strong><br>
             Vélos disponibles : ${st.bikes}<br>
             Places libres : ${st.docks}
-        `);
+        `).setIcon(veloIcon);
     });
   }
 

@@ -9,8 +9,16 @@ async function init() {
     // IP
     // --------------------
     const geo = await getJSON("https://ipapi.co/json/");
-    const lat = geo.latitude;
-    const lon = geo.longitude;
+    let lat, lon;
+    const ville = geo.city;
+
+    if (ville !== "Nancy") {
+        lat = 48.68298;
+        lon = 6.16095;
+    } else {
+        lat = geo.latitude;
+        lon = geo.longitude;
+    }
 
 
     // --------------------
