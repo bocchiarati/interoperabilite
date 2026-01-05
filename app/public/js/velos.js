@@ -9,8 +9,16 @@ async function init() {
     // IP
     // --------------------
     const geo = await getJSON("https://ipapi.co/json/");
-    const lat = geo.latitude;
-    const lon = geo.longitude;
+    let lat, lon;
+    const ville = geo.city;
+
+    if (ville !== "Nancy") {
+        lat = 48.68298;
+        lon = 6.16095;
+    } else {
+        lat = geo.latitude;
+        lon = geo.longitude;
+    }
 
 
     // --------------------
@@ -100,7 +108,7 @@ async function init() {
 
     if (tempC < 3) raisons.push("froid");
     if (tempC > 30) raisons.push("trop chaud");
-    if (vent > 5) raisons.push("vent fort");
+    if (vent > 10) raisons.push("vent fort");
     if (pluie > 0) raisons.push("pluie");
     if (indicePollution > 2) raisons.push("pollution élevée");
     if (stations.every(s => s.bikes === 0)) raisons.push("aucun vélo disponible");
@@ -129,10 +137,11 @@ async function init() {
     const ul = document.getElementById("stations");
     ul.innerHTML = ``;
     stations.sort((a, b) => b.bikes - a.bikes)
-        .slice(0, 10)
         .forEach(s => {
             const li = document.createElement("li");
-            li.textContent = `${s.name} – vélos : ${s.bikes}, places : ${s.docks}`;
+            li.innerHTML = `<strong>${s.name}</strong>
+            <p>Nombre de vélos disponibles : ${s.bikes}</p>
+            <p>Nombre de places disponibles : ${s.docks}</p>`;
             ul.appendChild(li);
         });
 
