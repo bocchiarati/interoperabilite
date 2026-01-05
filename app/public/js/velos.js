@@ -128,13 +128,14 @@ async function init() {
 
     const ul = document.getElementById("stations");
     ul.innerHTML = ``;
-    stations.sort((a,b) => b.bikes - a.bikes)
+    stations.sort((a, b) => b.bikes - a.bikes)
         .slice(0, 10)
         .forEach(s => {
             const li = document.createElement("li");
             li.textContent = `${s.name} – vélos : ${s.bikes}, places : ${s.docks}`;
             ul.appendChild(li);
         });
+
 }
 
 init().catch(err => console.error(err));

@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Décision Vélo Nancy</title>
   <link rel="stylesheet" href="css/velos.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
 </head>
 <body>
 
@@ -43,8 +50,68 @@
       <li><strong>Vélos :</strong>   https://api.cyclocity.fr/contracts/nancy/gbfs/gbfs.json</li>
     </ul>
   </section>
+
+  <div style='height: 750px; margin-bottom: 10em; width:75%; margin-left:auto; margin-right:auto' id='map'></div>
+
 </main>
 
 <script src="js/velos.js"></script>
+<script>
+  async function initMap() {
+    const geoResp = await fetch("https://ipapi.co/json/");
+    const geo = await geoResp.json();
+    const lat = geo.latitude;
+    const lon = geo.longitude;
+
+    const map = L.map('map').setView([lat, lon], 14);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    //placer le client
+    L.marker([lat, lon]).addTo(map).bindPopup("Vous êtes ici").openPopup();
+
+
+    const gbfsResp = await fetch("https://api.cyclocity.fr/contracts/nancy/gbfs/gbfs.json");
+    const gbfs = await gbfsResp.json();
+    const feeds = gbfs.data.fr.feeds;
+
+    const stationInfoUrl = feeds.find(f => f.name === "station_information").url;
+    const stationStatusUrl = feeds.find(f => f.name === "station_status").url;
+
+    const stationInfoResp = await fetch(stationInfoUrl);
+    const stationInfo = await stationInfoResp.json();
+
+    const stationStatusResp = await fetch(stationStatusUrl);
+    const stationStatus = await stationStatusResp.json();
+
+    //liaison
+    const stations = stationInfo.data.stations.map(st => {
+      const status = stationStatus.data.stations.find(s => s.station_id === st.station_id);
+      return {
+        name: st.name,
+        lat: st.lat,
+        lon: st.lon,
+        bikes: status ? status.num_bikes_available : 0,
+        docks: status ? status.num_docks_available : 0
+      };
+    });
+
+
+
+    stations.forEach(st => {
+      const marker = L.marker([st.lat, st.lon]).addTo(map);
+      marker.bindPopup(`
+            <strong>${st.name}</strong><br>
+            Vélos disponibles : ${st.bikes}<br>
+            Places libres : ${st.docks}
+        `);
+    });
+  }
+
+  initMap().catch(err => console.error(err));
+</script>
 </body>
 </html>
