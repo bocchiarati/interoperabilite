@@ -1,0 +1,55 @@
+body {
+    background-color: #181d22;
+    color: white
+}
+
+#geoloc {
+    position:absolute;
+    right: 3%;
+}
+
+.title {
+    text-align: center;
+    font-size: 4em;
+}
+
+#meteo {
+    display: flex;
+    gap: 10%;
+    margin-left:10%;
+    max-width: 70%;
+    overflow: scroll;
+    margin-right: auto;
+}
+
+#matin {
+    background: linear-gradient(to right, #f83600 0%, #f9d423 100%);
+    min-height: 200px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+#midi {
+    /* Un bleu ciel éclatant vers un bleu azur */
+    background: linear-gradient(180deg, #127bd6 50%, #6ec2f3 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+#soir {
+    /* Un dégradé "Sunset" chaud et apaisant */
+    background: linear-gradient(225deg, #2c3e50 0%, #fd746c 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+
+#map {
+    height: 750px; margin-bottom: 10em; width:75%; margin-left:auto; margin-right:auto
+}
+
+#covidChart {
+    margin-bottom: 10em; width:75%; margin-left:auto; margin-right:auto;
+    background-color: #ebebff; padding: 3.5em; border-radius: 2em
+}
