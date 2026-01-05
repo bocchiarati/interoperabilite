@@ -137,7 +137,6 @@ async function init() {
     const ul = document.getElementById("stations");
     ul.innerHTML = ``;
     stations.sort((a, b) => b.bikes - a.bikes)
-        .slice(0, 10)
         .forEach(s => {
             const li = document.createElement("li");
             li.innerHTML = `<strong>${s.name}</strong>

@@ -47,6 +47,10 @@ li {
     border-bottom: 1px solid #eee;
 }
 
+#stations-section ul {
+    max-height: 300px;
+    overflow-y: auto;
+}
 
 #decision-section h2 {
     display: inline-block;
@@ -63,6 +67,7 @@ li {
     background-color: #d00000;
     color: white;
 }
+
 
 #sources-section ul li  {
     word-break: break-all;
